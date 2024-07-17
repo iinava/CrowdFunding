@@ -10,7 +10,7 @@ function Layout() {
       <div className="navbar">
         <NavbarNextUI />
       </div>
-      <div className="  ">
+      <div className="">
         <Outlet />
       </div>
     </div>

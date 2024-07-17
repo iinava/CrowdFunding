@@ -5,6 +5,8 @@ import Register from "./pages/auth/Register";
 import NotFound from "./pages/auth/NotFound";
 import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import Profile from "./pages/profile/Profile";
+import Dashboard from "./pages/home/Dashboard";
+import LandingPage from "./pages/Landing/LandingPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -12,6 +14,10 @@ function App() {
       path: "/",
       element: <Layout />,
       children: [
+        {
+          path: "/",
+          element: <LandingPage />
+        },
         {
           path: "login",
           element: <Login />
@@ -32,6 +38,10 @@ function App() {
         {
           path: "profile",
           element: <Profile/>
+        },
+        {
+          path: "dashboard",
+          element: <Dashboard/>
         }
       ]
     }

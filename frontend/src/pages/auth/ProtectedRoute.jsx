@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../../lib/api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../../lib/constants";
 import { useState, useEffect } from "react";
+import UserNavbar from "../../components/shared/UserNavBar";
 
 function ProtectedRoute() {
   const [isAuthorized, setIsAuthorized] = useState(null);
@@ -53,11 +54,11 @@ function ProtectedRoute() {
   return !isAuthorized ? (
     <Navigate to="/login" />
   ) : (
-    <div className="layout  ">
+    <div className=" flex flex-col  min-h-screen w-full space-y-4">
       <div className="navbar">
-        <p>isAuthorizednavbar</p>
+      <UserNavbar/>
       </div>
-      <div className="  ">
+      <div className=" pt-20 w-full px-[2vw]">
         <Outlet />
       </div>
     </div>
