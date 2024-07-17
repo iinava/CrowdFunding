@@ -29,3 +29,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields='__all__'
         extra_kwargs={"user":{"read_only": True}}
         
+class GetUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'id']

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer,ProfileSerializer
+from .serializers import UserSerializer,ProfileSerializer,GetUserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from .models import Profile
@@ -16,12 +16,23 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
     
+
+# class UserInfoAPIView(GenericAPIView):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = GetUserSerializer
+
+#     def get(self, request):
+#         user = self.request.user
+#         serializer = self.serializer_class(user)
+#         return Response({'data': serializer.data, 'message': 'user information', 'success': '1'}, status=status.HTTP_200_OK)
+    
+    
 class UserInfoAPIView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
-    
     def get_object(self):
-        return self.request.user    
+        return self.request.user        
+       
     
 class UserProfileView(GenericAPIView):
     serializer_class = ProfileSerializer
