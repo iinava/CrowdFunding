@@ -55,8 +55,8 @@ class UserProfileView(GenericAPIView):
         serializer = self.serializer_class(data=profiledata, instance=queryset, partial=True)
         if serializer.is_valid():
             serializer.save()
-            queryset.is_verified = False  # Update the instance attribute
-            queryset.save()  # Save the instance
+            queryset.is_verified = False  
+            queryset.save()  
             return Response({'data': serializer.data, 'message': 'Profile updated successfully', 'success': '1'}, status=status.HTTP_200_OK)
         
         return Response({'error': serializer.errors, 'message': 'Could not update profile', 'success': '0'}, status=status.HTTP_400_BAD_REQUEST)
