@@ -7,6 +7,7 @@ from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from .models import Profile
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.
 
@@ -17,14 +18,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     
 
-# class UserInfoAPIView(GenericAPIView):
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = GetUserSerializer
 
-#     def get(self, request):
-#         user = self.request.user
-#         serializer = self.serializer_class(user)
-#         return Response({'data': serializer.data, 'message': 'user information', 'success': '1'}, status=status.HTTP_200_OK)
     
     
 class UserInfoAPIView(RetrieveAPIView):
@@ -32,22 +26,52 @@ class UserInfoAPIView(RetrieveAPIView):
     serializer_class = UserSerializer
     def get_object(self):
         return self.request.user        
-       
     
+    
+class UserLogoutAPIView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({'error': 'logout success', 'success':'0'},status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({'error': 'could not logout', 'success':'0'},status= status.HTTP_400_BAD_REQUEST)
+    
+    
+       
 class UserProfileView(GenericAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
-
     def put(self, request):
-        queryset = Profile.objects.get(user=self.request.user)
+        try:
+            queryset = Profile.objects.get(user=self.request.user)
+        except Profile.DoesNotExist:
+            return Response({'error': 'Profile does not exist', 'message': 'Could not update profile', 'success': '0'}, status=status.HTTP_400_BAD_REQUEST)
+        
         profiledata = request.data
-        serializer = self.serializer_class(data=profiledata,instance=queryset,partial=True)
+        serializer = self.serializer_class(data=profiledata, instance=queryset, partial=True)
         if serializer.is_valid():
             serializer.save()
+            queryset.is_verified = False  # Update the instance attribute
+            queryset.save()  # Save the instance
             return Response({'data': serializer.data, 'message': 'Profile updated successfully', 'success': '1'}, status=status.HTTP_200_OK)
+        
         return Response({'error': serializer.errors, 'message': 'Could not update profile', 'success': '0'}, status=status.HTTP_400_BAD_REQUEST)
     
-
+    def get(self, request):
+        try:
+            queryset = Profile.objects.get(user=self.request.user)
+        except Profile.DoesNotExist:
+            return Response({'error': 'Profile does not exist', 'message': 'Could not get profile', 'success': '0'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = ProfileSerializer(queryset)
+        return Response({'data': serializer.data, 'message': 'Profile data', 'success': '1'}, status=status.HTTP_200_OK)
+    
+    
+    
 class ProfileDeleteView(generics.DestroyAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]

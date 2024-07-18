@@ -8,14 +8,38 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-  Button,
+  Avatar,
 } from "@nextui-org/react";
-import { FaGithub } from "react-icons/fa";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+import {  useNavigate } from "react-router-dom";
+import { REFRESH_TOKEN ,ACCESS_TOKEN} from "../../lib/constants";
+import api from "../../lib/api";
+
 
 export default function UserNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const navigate = useNavigate()
 
   const menuItems = ["Home", "login", "register"];
+
+const Logout = async ()=>{
+  const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+   await api.post('/api/user/logout/',{ refresh:refreshToken }).then(()=>{
+    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(ACCESS_TOKEN);
+    navigate('/login');
+    console.log("navigate to login")
+   }).catch((err)=>{
+    console.log("could not log out");
+   })
+   
+
+}
 
   return (
     <Navbar
@@ -35,29 +59,37 @@ export default function UserNavbar() {
 
       <NavbarContent className="hidden sm:flex " justify="center">
         <NavbarItem>
-          <Link href="/#agenda" aria-current="page" className="text-white">
-            insights
+          <Link color="foreground" href="/#testimonials">
+            All projects
           </Link>
         </NavbarItem>
 
-        <NavbarItem>
-          <Link color="foreground" href="/#testimonials">
-            Testimonials
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="/#contact">
-            contact
-          </Link>
-        </NavbarItem>
+        <Dropdown>
+          <DropdownTrigger>
+            <div className="cursor-pointer" variant="light">
+              Categories
+            </div>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Static Actions">
+            <DropdownItem key="new">New file</DropdownItem>
+            <DropdownItem key="copy">Copy link</DropdownItem>
+            <DropdownItem key="edit">Edit file</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-      <a href="https://github.com/iinava/fundchain-web3"><FaGithub size={20} /></a>
+          <Dropdown>
+            <DropdownTrigger>
+              <Avatar className="cursor-pointer" />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              <DropdownItem key="profile" onPress={()=>navigate('/profile')}>profile</DropdownItem>
+              <DropdownItem key="copy"onPress={()=>{Logout()}} >logout</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarItem>
-        <NavbarItem>
-          {/* <ButtonBackgroundShine text={"Login"} /> */}
-        </NavbarItem>
+        <NavbarItem></NavbarItem>
       </NavbarContent>
       <NavbarMenu className="flex flex-col gap-10">
         {menuItems.map((item, index) => (

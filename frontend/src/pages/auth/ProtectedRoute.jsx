@@ -21,6 +21,7 @@ function ProtectedRoute() {
       if (res.status === 200) {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         setIsAuthorized(true);
+        console.log("by me refresh token");
       } else {
         setIsAuthorized(false);
       }
@@ -39,6 +40,8 @@ function ProtectedRoute() {
     const decoded = jwtDecode(token);
     const tokenExpiration = decoded.exp;
     const now = Date.now() / 1000;
+    
+console.log(tokenExpiration-now);
 
     if (tokenExpiration < now) {
       await refreshToken();
@@ -50,6 +53,7 @@ function ProtectedRoute() {
   if (isAuthorized === null) {
     return <div>Loading...</div>;
   }
+  console.log(isAuthorized,"authorization")
 
   return !isAuthorized ? (
     <Navigate to="/login" />
