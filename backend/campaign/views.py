@@ -5,7 +5,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Campaign
 from .serializers import CampaignSerializer
+from .pagination import CampaignPagination
 import cloudinary
+
 
 class AddCampaignView(GenericAPIView):
     serializer_class = CampaignSerializer
@@ -151,4 +153,36 @@ class RetriveCampaignAndUpdate(GenericAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
+        
+class ViewAllCampaigns(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CampaignSerializer
+    pagination_class = CampaignPagination
+
+    def get(self, request):
+        try:
+            campaigns = Campaign.objects.all().order_by('-created_at')
             
+            if not campaigns.exists():
+                return Response(
+                    {'message': 'No campaigns available', 'success': '0'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            paginator = self.pagination_class()
+            
+            paginated_campaigns = paginator.paginate_queryset(campaigns, request)
+            
+            serializer = self.serializer_class(paginated_campaigns, many=True)
+            
+            return paginator.get_paginated_response({
+                'data': serializer.data,
+                'message': 'List of all campaigns',
+                'success': '1'
+            })
+        
+        except Exception as e:
+            return Response(
+                {'message': 'An error occurred while fetching campaigns', 'success': '0'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

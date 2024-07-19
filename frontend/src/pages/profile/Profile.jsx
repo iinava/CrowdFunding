@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchProfile, updateProfile } from "../../features/ProfileSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileSchma } from "../../lib/zodschema";
-import ProfileSkelton from "../../components/Skeltons";
+import {ProfileSkelton} from "../../components/Skeltons";
 
 export default function Profile() {
   const dispatch = useDispatch();
