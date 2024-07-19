@@ -30,16 +30,27 @@ class UserInfoAPIView(RetrieveAPIView):
     
 class UserLogoutAPIView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
-    
+
     def post(self, request, *args, **kwargs):
+        refresh_token = request.data.get("refresh")
+        
+        if not refresh_token:
+            return Response(
+                {'error': 'Refresh token not provided', 'success': '0'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
-            refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({'error': 'logout success', 'success':'0'},status=status.HTTP_205_RESET_CONTENT)
+            token.blacklist()  # Blacklist the refresh token
+            return Response(
+                {'message': 'Logout successful', 'success': '1'},
+                status=status.HTTP_205_RESET_CONTENT
+            )
         except Exception as e:
-            return Response({'error': 'could not logout', 'success':'0'},status= status.HTTP_400_BAD_REQUEST)
-    
+            return Response(
+                {'error': 'Could not logout: ' + str(e), 'success': '0'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
     
        
 class UserProfileView(GenericAPIView):
