@@ -23,6 +23,7 @@ function Form({ route, method }) {
       if (method === "login") {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+        localStorage.setItem("IS_LOGGED_IN", true);
         navigate("/dashboard");
       } else {
         navigate("/login");

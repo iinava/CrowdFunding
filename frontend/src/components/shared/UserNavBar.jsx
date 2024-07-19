@@ -32,6 +32,7 @@ const Logout = async ()=>{
    await api.post('/api/user/logout/',{ refresh:refreshToken }).then(()=>{
     localStorage.removeItem(REFRESH_TOKEN);
     localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem("IS_LOGGED_IN");
     navigate('/login');
     console.log("navigate to login")
    }).catch((err)=>{

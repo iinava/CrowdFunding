@@ -1,16 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import Navbar from "./components/shared/NavBar";
 import NavbarNextUI from "./components/shared/NavBar";
 import api from "./lib/api";
 
 function Layout() {
   return (
-    <div className="layout w-full  ">
+    <div className="flex flex-col  w-full space-y-4">
       <div className="navbar">
         <NavbarNextUI />
       </div>
-      <div className="">
+      <div className="pt-20 w-full  min-h-screen px-[2vw]">
         <Outlet />
       </div>
     </div>
