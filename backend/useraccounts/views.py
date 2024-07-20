@@ -41,7 +41,7 @@ class UserLogoutAPIView(GenericAPIView):
             )
         try:
             token = RefreshToken(refresh_token)
-            token.blacklist()  # Blacklist the refresh token
+            token.blacklist() 
             return Response(
                 {'message': 'Logout successful', 'success': '1'},
                 status=status.HTTP_205_RESET_CONTENT

@@ -5,6 +5,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Campaign
 from .serializers import CampaignSerializer
+from useraccounts.serializers import ProfileSerializer
+from useraccounts.models import Profile
 from .pagination import CampaignPagination
 import cloudinary
 
@@ -186,3 +188,54 @@ class ViewAllCampaigns(GenericAPIView):
                 {'message': 'An error occurred while fetching campaigns', 'success': '0'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+            
+class ViewCampaignBuyslug(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CampaignSerializer
+    profile_class = ProfileSerializer
+    
+    def get(self, request, slug):
+        try:
+            campaign = Campaign.objects.get(slug=slug)
+        except Campaign.DoesNotExist:
+            return Response(
+                {'message': 'Campaign not found', 'success': '0'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        user = self.request.user
+        try:
+            profile = Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            return Response(
+                {'message': 'Profile not found', 'success': '0'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        try:
+            campaign_serializer = self.serializer_class(campaign)
+        except ValidationError as e:
+            return Response(
+                {'message': 'Error serializing campaign data', 'errors': e.detail, 'success': '0'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            profile_serializer = self.profile_class(profile)
+        except ValidationError as e:
+            return Response(
+                {'message': 'Error serializing profile data', 'errors': e.detail, 'success': '0'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {
+                'data': {
+                    'campaign': campaign_serializer.data,
+                    'profile': profile_serializer.data
+                },
+                'message': 'Campaign and Profile details',
+                'success': '1'
+            },
+            status=status.HTTP_200_OK
+        )
