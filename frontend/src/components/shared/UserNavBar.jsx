@@ -86,7 +86,7 @@ const Logout = async ()=>{
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="profile" onPress={()=>navigate('/profile')}>profile</DropdownItem>
-              <DropdownItem key="copy"onPress={()=>{Logout()}} >logout</DropdownItem>
+              <DropdownItem key="logout"onClick={()=>{Logout()}} >logout</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </NavbarItem>

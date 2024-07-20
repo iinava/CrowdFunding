@@ -28,12 +28,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(fetchPaginatedCampaigns(currentPage));
-    console.log("Fetching campaign data for page:", currentPage);
   }, [dispatch, currentPage]);
 
   useEffect(() => {
     if (success) {
-      console.log(campaign.results.data, "received");
       setProjectsCardData(campaign.results.data);
       setTotalPages(Math.ceil(campaign.count / 6));
     }
@@ -43,7 +41,13 @@ export default function Dashboard() {
     console.log(page, "changed");
     setCurrentPage(page);
   };
-
+  if (error)
+    return (
+      <>
+        <p className="text-center">Some error occured loadig Campaigns </p>
+      </>
+    );
+  else
   return (
     <div className="w-full flex flex-col justify-center items-center sm:justify-around">
       <div className="w-full flex justify-between items-center flex-wrap-reverse gap-10 my-10">

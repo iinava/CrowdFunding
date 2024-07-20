@@ -3,20 +3,21 @@ import React from "react";
 import ProgressBar from "./ProgressBar";
 
 export default function ProjectCard({ProjectsCardData}) {
+  const percentage = Math.ceil((ProjectsCardData.target_amount / ProjectsCardData.initial_amount)*100)
 
 const tags = ['sustainabilty','crypto','donation']
   return (
     <div className=" rounded-2xl overflow-hidden">
       <img
-        alt="Laptop"
+        alt="cmpaign-project image"
         src={ProjectsCardData.image}
         className="h-[250px] w-full rounded-t-2xl object-cover "
       />
       <div className="p-4 rounded-2xl bg-neutral-900 relative bottom-10 duration-700 hover:-translate-y-8">
-        <h1 className="inline-flex items-center text-lg font-semibold">
+        <h1 className="inline-flex items-center text-lg font-semibold line-clamp-1">
           {ProjectsCardData.title}
         </h1>
-        <p className="mt-3 text-sm line-clamp-2">{ProjectsCardData.details}</p>
+        <p className="mt-3 text-sm line-clamp-2">{ProjectsCardData.description}</p>
         {tags.length > 0 && (
           <div className="mt-4 text-black">
             {tags.map((item, index) => (
@@ -29,7 +30,7 @@ const tags = ['sustainabilty','crypto','donation']
             ))}
           </div>
         )}
-        <ProgressBar  progress={20} />
+        <ProgressBar  progress={percentage} />
         <Button   as={Link} href={ProjectsCardData.href} className="w-full mt-4">View</Button>
       </div>
     </div>

@@ -8,7 +8,7 @@ function Layout() {
       <div className="navbar">
         <NavbarNextUI />
       </div>
-      <div className="pt-20 w-full  min-h-screen px-[2vw]">
+      <div className=" w-full  min-h-screen px-[]">
         <Outlet />
       </div>
     </div>
