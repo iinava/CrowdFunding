@@ -62,7 +62,7 @@ console.log(tokenExpiration-now);
       <div className="navbar">
       <UserNavbar/>
       </div>
-      <div className=" pt-20 w-full px-[2vw]">
+      <div className=" pt-20 w-full px-[4vw]">
         <Outlet />
       </div>
     </div>

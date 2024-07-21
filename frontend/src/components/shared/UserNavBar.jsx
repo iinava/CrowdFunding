@@ -45,8 +45,8 @@ const Logout = async ()=>{
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      maxWidth="2xl"
-      className="font-thin absolute"
+      maxWidth="full"
+      className="font-thin absolute md:px-[3vw]"
     >
       <NavbarContent>
         <NavbarMenuToggle

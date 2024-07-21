@@ -80,7 +80,7 @@ export default function Dashboard() {
           Projects
         </h1>
 
-        <div className="w-[95vw] flex flex-wrap justify-between items-center my-3">
+        <div className="w-[100%] flex flex-wrap justify-between items-center my-3">
           <div className="py-3 space-x-3">
             <Button className="rounded-3xl bg-blue-200 text-black">
               Category
