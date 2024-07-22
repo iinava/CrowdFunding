@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
-from .models import Campaign
-from .serializers import CampaignSerializer
+from rest_framework.permissions import IsAuthenticated,AllowAny
+from .models import Campaign,Category
+from .serializers import CampaignSerializer,CategorySerializer
 from useraccounts.serializers import ProfileSerializer
 from useraccounts.models import Profile
 from .pagination import CampaignPagination
@@ -239,3 +239,19 @@ class ViewCampaignBuyslug(GenericAPIView):
             },
             status=status.HTTP_200_OK
         )
+        
+# category details , CRUD        
+
+class CategoryListView(GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CategorySerializer
+
+
+    def get(self, request):
+        queryset = Category.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'status': 'success',
+            'data': serializer.data,
+            'message': 'Categories retrieved successfully'
+        }, status=status.HTTP_200_OK)
