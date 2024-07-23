@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from .views import AddCampaignView,ViewCampaignsByUser,DeleteCampaign,RetriveCampaignAndUpdate,ViewAllCampaigns,ViewCampaignBuyslug,CategoryListView
+from .views import *
 
 urlpatterns = [
    path("addcampaign/", AddCampaignView.as_view(), name="addcampaign"),
@@ -10,4 +10,5 @@ urlpatterns = [
    path("viewallcampaigns/", ViewAllCampaigns.as_view(), name="viewallcampaigns"),
    path("viewcampaign/<slug:slug>", ViewCampaignBuyslug.as_view(), name="viewcampaign"),
    path('categories/', CategoryListView.as_view(), name='categories'),
+   path('category/<int:category_id>', CategoryBasedView.as_view(), name='category-list'),
 ]

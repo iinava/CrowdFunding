@@ -255,3 +255,37 @@ class CategoryListView(GenericAPIView):
             'data': serializer.data,
             'message': 'Categories retrieved successfully'
         }, status=status.HTTP_200_OK)
+        
+        
+class CategoryBasedView(GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CampaignSerializer
+    
+    def get(self, request, category_id):
+        try:
+            category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            return Response({
+                'error': 'Category not found',
+                'success': 0,
+                'message': 'The specified category does not exist'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        queryset = Campaign.objects.filter(category_id=category_id)
+        
+        if not queryset.exists():
+            return Response({
+                'data': [],
+                'count': 0,
+                'success': 0,
+                'message': 'No campaigns found for this category'
+            }, status=status.HTTP_200_OK)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'data': serializer.data,
+            'status': status.HTTP_200_OK,
+            'success': 1,
+            'count': queryset.count(),
+            'message': 'Campaigns in this category retrieved successfully'
+        }, status=status.HTTP_200_OK)
