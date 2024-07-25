@@ -7,6 +7,8 @@ import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/home/Dashboard";
 import LandingPage from "./pages/Landing/LandingPage";
+import CampaignDetails from "./pages/home/CampaignDetails";
+import CategoryDashboard from "./pages/home/CategoryDashboard";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,9 +27,6 @@ function App() {
         {
           path: "register",
           element: <Register />
-        },{
-          path:"*",
-          element: <NotFound/>
         }
       ]
     },
@@ -42,6 +41,18 @@ function App() {
         {
           path: "dashboard",
           element: <Dashboard/>
+        },
+        {
+          path:"campaigns/:slug",
+          element:<CampaignDetails/>
+        },
+        {
+          path:"campaign/category/:category",
+          element:<CategoryDashboard/>
+        }
+        ,{
+          path:"*",
+          element: <NotFound/>
         }
       ]
     }

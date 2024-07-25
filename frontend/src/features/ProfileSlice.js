@@ -30,7 +30,7 @@ export const updateProfile = createAsyncThunk(
   async (profileData) => {
     try {
       const response = await api.put('/api/user/profile/', profileData);
-      console.log(response.data.data);
+      // console.log(response.data.data);
       return response.data.data;
     } catch (err) {
       // console.log(err);

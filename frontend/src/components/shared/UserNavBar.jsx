@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -7,7 +7,6 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Link,
   Avatar,
 } from "@nextui-org/react";
 import {
@@ -16,37 +15,49 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {  useNavigate } from "react-router-dom";
-import { REFRESH_TOKEN ,ACCESS_TOKEN} from "../../lib/constants";
+import { useNavigate, Link, NavLink } from "react-router-dom";
+import { REFRESH_TOKEN, ACCESS_TOKEN } from "../../lib/constants";
 import api from "../../lib/api";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchcategorys } from "../../features/CategoriesSlice";
 
 export default function UserNavbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const navigate = useNavigate()
+
+  const Category = useSelector((state) => state.Category.Category);
+
+  const error = useSelector((state) => state.Category.error);
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const menuItems = ["Home", "login", "register"];
 
-const Logout = async ()=>{
-  const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-   await api.post('/api/user/logout/',{ refresh:refreshToken }).then(()=>{
-    localStorage.removeItem(REFRESH_TOKEN);
-    localStorage.removeItem(ACCESS_TOKEN);
-    localStorage.removeItem("IS_LOGGED_IN");
-    navigate('/login');
-    console.log("navigate to login")
-   }).catch((err)=>{
-    console.log("could not log out");
-   })
-   
+  const Logout = async () => {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    await api
+      .post("/api/user/logout/", { refresh: refreshToken })
+      .then(() => {
+        localStorage.removeItem(REFRESH_TOKEN);
+        localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem("IS_LOGGED_IN");
+        navigate("/login");
+        console.log("navigate to login");
+      })
+      .catch((err) => {
+        console.log("could not log out");
+      });
+  };
 
-}
+  useEffect(() => {
+    dispatch(fetchcategorys());
+  }, [dispatch]);
 
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
-      className="font-thin absolute md:px-[3vw]"
+      className="font-thin absolute md:px-[3vw] bg-neutral-900"
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -54,29 +65,49 @@ const Logout = async ()=>{
           className="sm:hidden"
         />
         <NavbarBrand>
-          <h1 className="text-2xl font-thin">Fund Chain</h1>
+          <img
+            src="https://giveth.io/images/logo/logo.svg"
+            className="filter invert"
+            alt=""
+          />
+          <h1 className="text-2xl font-thin"> Fund chain</h1>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex " justify="center">
+      <NavbarContent className="hidden sm:flex" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/#testimonials">
+          <NavLink
+            to="/dashboard"
+            className="text-1xl font-thin hover:text-green-500"
+          >
             All projects
-          </Link>
+          </NavLink>
         </NavbarItem>
 
-        <Dropdown>
-          <DropdownTrigger>
-            <div className="cursor-pointer" variant="light">
-              Categories
-            </div>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Static Actions">
-            <DropdownItem key="new">New file</DropdownItem>
-            <DropdownItem key="copy">Copy link</DropdownItem>
-            <DropdownItem key="edit">Edit file</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        {Category && (
+          <Dropdown>
+            <DropdownTrigger>
+              <div
+                variant="light"
+                className="hover:text-green-500 cursor-pointer"
+              >
+                Categories
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              {Category.map((cat) => (
+                <DropdownItem key={cat.id}>
+                  <NavLink
+                    to={`campaign/category/${cat.name}`}
+                    className="hover:text-green-500"
+                  >
+                    {cat.name}
+                  </NavLink>
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        )}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
@@ -85,8 +116,12 @@ const Logout = async ()=>{
               <Avatar className="cursor-pointer" />
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="profile" onPress={()=>navigate('/profile')}>profile</DropdownItem>
-              <DropdownItem key="logout"onClick={()=>{Logout()}} >logout</DropdownItem>
+              <DropdownItem key="profile" onPress={() => navigate("/profile")}>
+                Profile
+              </DropdownItem>
+              <DropdownItem key="logout" onClick={Logout}>
+                Logout
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </NavbarItem>
@@ -96,9 +131,8 @@ const Logout = async ()=>{
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
-              className="w-full text-white text-3xl my-6 font-thin font-mono "
-              href="#"
-              size="lg"
+              className="w-full text-white text-3xl my-6 font-thin font-mono"
+              to={`/${item.toLowerCase()}`}
             >
               {item}
             </Link>

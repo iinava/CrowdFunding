@@ -43,10 +43,9 @@ export default function CampaignDetails() {
   else
     return (
       <div className="min-h-screen">
-        <Breadcrumbs  color="success" className="mb-3 text-white">
+        <Breadcrumbs color="success" className="mb-3 text-white">
           <BreadcrumbItem>Campaigns</BreadcrumbItem>
           <BreadcrumbItem>{slug}</BreadcrumbItem>
-          
         </Breadcrumbs>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
           <div
@@ -56,30 +55,29 @@ export default function CampaignDetails() {
             }}
           >
             <h1 className=" font-extrabold text-3xl relative ">
-              {campaigndetails.title} {" "}
+              {campaigndetails.title}{" "}
               <span className="text-sm">by {creatordetails.legal_name}</span>
               <div className="gap-2 py-3 flex justify-start items-center flex-wrap">
-            <span>
-              {!campaigndetails.is_verified ? (
-                <Chip
-                  startContent={<CheckIcon size={18} />}
-                  variant="faded"
-                  color="danger"
-                >
-                  not verified
-                </Chip>
-              ) : (
-                <Chip
-                  startContent={<CheckIcon size={18} />}
-                  variant="faded"
-                  color="success"
-                >
-                  verified profile
-                </Chip>
-              )}
-            </span>
-          </div>
-
+                <span>
+                  {!creatordetails.is_verified ? (
+                    <Chip
+                      startContent={<CheckIcon size={18} />}
+                      variant="faded"
+                      color="danger"
+                    >
+                      not verified
+                    </Chip>
+                  ) : (
+                    <Chip
+                      startContent={<CheckIcon size={18} />}
+                      variant="faded"
+                      color="success"
+                    >
+                      verified profile
+                    </Chip>
+                  )}
+                </span>
+              </div>
             </h1>
           </div>
           <div className="space-y-2">
@@ -104,7 +102,6 @@ export default function CampaignDetails() {
           </div>
         </div>
         <div>
-         
           <div className="grid grid-cols-1 mt-2">
             <div className="h-[30vh] rounded-lg  lg:col-span-2 ">
               <Tabs aria-label="Options">

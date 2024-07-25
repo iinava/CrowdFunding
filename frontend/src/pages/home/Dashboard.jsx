@@ -69,8 +69,8 @@ export default function Dashboard() {
           alt=""
         />
       </div>
-      <div className="w-full flex flex-col">
-        <h1 className="text-2xl m-3 ">
+      <div className="w-full flex flex-wrap justify-between m-3">
+        <h1 className="text-2xl ">
           Explore
           {campaign && (
             <span className="m-1 font-bold  text-sky-300">
@@ -79,16 +79,6 @@ export default function Dashboard() {
           )}
           Projects
         </h1>
-
-        <div className="w-[100%] flex flex-wrap justify-between items-center my-3">
-          <div className="py-3 space-x-3">
-            <Button className="rounded-3xl bg-blue-200 text-black">
-              Category
-            </Button>
-            <Button className="rounded-3xl bg-green-600 text-black">
-              Category2
-            </Button>
-          </div>
           <Pagination
             loop
             showControls
@@ -97,7 +87,7 @@ export default function Dashboard() {
             initialPage={1}
             onChange={(page) => handlePageChange(page)}
           />
-        </div>
+        
       </div>
 
       {loading ? (
@@ -118,6 +108,10 @@ export default function Dashboard() {
       <Button className="ml-auto flex justify-center h-16 w-full rounded-xl bg-neutral-800 mb-10">
         View more Active projects
       </Button>
+    <div className="w-full flex flex-wrap justify-between items-center">
+    <Button>Add your own project</Button>
+    <img src="https://clr.fund/assets/wormhole_w2160-4d60e9bd.png" className="w-[350px]" alt="" />
+    </div>
 
       <Accordion variant="shadow">
         <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
