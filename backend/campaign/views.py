@@ -261,9 +261,9 @@ class CategoryBasedView(GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = CampaignSerializer
     
-    def get(self, request, category_id):
+    def get(self, request, slug):
         try:
-            category = Category.objects.get(id=category_id)
+            category = Category.objects.get(slug=slug)
         except Category.DoesNotExist:
             return Response({
                 'error': 'Category not found',
