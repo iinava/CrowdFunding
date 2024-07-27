@@ -1,9 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {Layout} from "./Layout";
+import {Layout,ProtectedRoute} from "./Layout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import NotFound from "./pages/auth/NotFound";
-import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import Profile from "./pages/profile/Profile";
 import Dashboard from "./pages/home/Dashboard";
 import LandingPage from "./pages/Landing/LandingPage";
