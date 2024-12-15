@@ -71,7 +71,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     'useraccounts',
-    'campaign'
+    'campaign',
+    'chat'
 ]
 
 MIDDLEWARE = [
